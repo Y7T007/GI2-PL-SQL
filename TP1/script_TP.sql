@@ -15,7 +15,7 @@ CONNECT ensate/ensate2020
 /* Table : AVION                                                */
 /*==============================================================*/
 
- create table avion (
+create table avion (
 	Id_av		Number(5),
 	Marque		varchar2(30) NOT NULL,
 	Modele		varchar2(10) NOT NULL,
