@@ -4,6 +4,7 @@ create or replace PROCEDURE add_reservation (
         res_date YASSIR.VOL.DATE_DEPART%TYPE 
     )
 IS
+    Erreur_ajout_vol EXCEPTION;
     BEGIN
         SELECT COUNT(*) INTO passager_count FROM YASSIR.PASSAGER WHERE ID_PAS = res_passager;
 
