@@ -1,4 +1,3 @@
--- Test case 1: Valid pilote ID with non-zero flight hours
 DECLARE
     result INTEGER;
 BEGIN
@@ -7,7 +6,6 @@ BEGIN
 END;
 /
 
--- Test case 2: Valid pilote ID with zero flight hours
 DECLARE
     result INTEGER;
 BEGIN
@@ -16,7 +14,6 @@ BEGIN
 END;
 /
 
--- Test case 3: Invalid pilote ID
 DECLARE
     result INTEGER;
 BEGIN

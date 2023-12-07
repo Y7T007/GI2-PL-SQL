@@ -63,3 +63,6 @@ BEGIN
     END IF;
 END;
 /
+
+
+drop FUNCTION HEURES_VOLS;

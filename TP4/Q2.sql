@@ -1,3 +1,5 @@
+DROP PROCEDURE PRIME;
+
 CREATE OR REPLACE PROCEDURE PRIME
     (
         TAUX FLOAT ,
@@ -37,8 +39,3 @@ IS
 END;
 /
 
-
-BEGIN
-    PRIME(0.3, 1);
-END;
-/
