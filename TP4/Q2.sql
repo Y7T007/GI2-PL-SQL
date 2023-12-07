@@ -32,9 +32,6 @@ IS
     END;
 /
 
-
-
-
 BEGIN
     PRIME(0.5, 1);
 END;
