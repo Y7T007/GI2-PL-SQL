@@ -1,53 +1,26 @@
--- FILEPATH: /e:/PROGRAMMING/PL_SQL/TPS/GI2-PL-SQL/TP4/TP1.sql
+create or replace PROCEDURE add_reservation (
+        res_passager YASSIR.PASSAGER.ID_PAS%TYPE,
+        res_vol YASSIR.VOL.ID_VOL%TYPE ,
+        res_date YASSIR.VOL.DATE_DEPART%TYPE 
+    )
+IS
+    BEGIN
+        SELECT COUNT(*) INTO passager_count FROM YASSIR.PASSAGER WHERE ID_PAS = res_passager;
 
-CREATE OR REPLACE PROCEDURE ADD_RESERVATION(
-    P_VOL_ID IN RESERVATION.VOL_ID%TYPE,
-    P_PASSAGER_ID IN RESERVATION.PASSAGER_ID%TYPE,
-    P_RESERVATION_DATE IN RESERVATION.RESERVATION_DATE%TYPE
-) AS
-    V_VOL_EXISTS      NUMBER;
-    V_PASSAGER_EXISTS NUMBER;
-BEGIN
- -- Verify the existence of the vol
-    SELECT
-        COUNT(*) INTO V_VOL_EXISTS
-    FROM
-        VOL
-    WHERE
-        VOL_ID = P_VOL_ID;
-    IF V_VOL_EXISTS = 0 THEN
-        RAISE_APPLICATION_ERROR(-20001, 'Vol does not exist');
-    END IF;
- -- Verify the existence of the passager
-    SELECT
-        COUNT(*) INTO V_PASSAGER_EXISTS
-    FROM
-        PASSAGER
-    WHERE
-        PASSAGER_ID = P_PASSAGER_ID;
-    IF V_PASSAGER_EXISTS = 0 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Passager does not exist');
-    END IF;
- -- Validate the reservation date
-    IF P_RESERVATION_DATE < SYSDATE THEN
-        RAISE_APPLICATION_ERROR(-20003, 'Invalid reservation date');
-    END IF;
- -- Insert the reservation
-    INSERT INTO RESERVATION (
-        VOL_ID,
-        PASSAGER_ID,
-        RESERVATION_DATE
-    ) VALUES (
-        P_VOL_ID,
-        P_PASSAGER_ID,
-        P_RESERVATION_DATE
-    );
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
- -- Handle exceptions
-        DBMS_OUTPUT.PUT_LINE('Error: '
-                             || SQLERRM);
-        ROLLBACK;
+                IF passager_count > 0
+                    AND (SELECT COUNT(*) FROM YASSIR.VOL WHERE ID_VOL = res_vol) > 0
+                    AND (SELECT COUNT(*) FROM YASSIR.VOL WHERE ID_VOL = res_vol AND DATE_DEPART > res_date) > SYSDATE
+                    AND (SELECT COUNT(*) FROM YASSIR.RESERVATION WHERE ID_PAS = res_passager AND ID_VOL = res_vol) = 0 
+                THEN
+                    INSERT INTO YASSIR.RESERVATION (ID_PAS, ID_VOL, DATE_RESERVATION) VALUES (res_passager, res_vol, res_date);
+                ELSE
+                    Raise Erreur_ajout_vol;
+                END IF;
+
+            EXCEPTION
+                WHEN Erreur_ajout_vol THEN
+                    DBMS_OUTPUT.PUT_LINE('Erreur lors de l''ajout de la reservation');
+    END;
+    /
 END;
 /
